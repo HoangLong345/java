@@ -1,4 +1,8 @@
-public class UserStats {
+package com.hivsystem.admin.model;
+
+import java.util.Map;
+
+public class User {
     private long totalPatients;
     private long totalDoctors;
     private long totalAppointments;
@@ -18,7 +22,7 @@ public class UserStats {
     public void setTotalDoctors(long totalDoctors) {
         this.totalDoctors = totalDoctors;
     }
-    
+
     public long getTotalAppointments() {
         return totalAppointments;
     }
