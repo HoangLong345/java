@@ -4,43 +4,68 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TestResult {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
-    private String testType;
-    private String resultValue;
+    @ManyToOne
+    private Patient patient;
+
+    private String testType; // ARV, CD4, HIV_VIRAL_LOAD
+    private String result;
     private LocalDate testDate;
-    private String patientName;
+    private String prescribedRegimen;
 
-    public TestResult() {}
-
-    public TestResult(Long id, String testType, String resultValue, LocalDate testDate, String patientName) {
-        this.id = id;
-        this.testType = testType;
-        this.resultValue = resultValue;
-        this.testDate = testDate;
-        this.patientName = patientName;
+    // Getter and Setter methods
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getTestType() { return testType; }
-    public void setTestType(String testType) { this.testType = testType; }
+    public Patient getPatient() {
+        return patient;
+    }
 
-    public String getResultValue() { return resultValue; }
-    public void setResultValue(String resultValue) { this.resultValue = resultValue; }
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
-    public LocalDate getTestDate() { return testDate; }
-    public void setTestDate(LocalDate testDate) { this.testDate = testDate; }
+    public String getTestType() {
+        return testType;
+    }
 
-    public String getPatientName() { return patientName; }
-    public void setPatientName(String patientName) { this.patientName = patientName; }
+    public void setTestType(String testType) {
+        this.testType = testType;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public LocalDate getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(LocalDate testDate) {
+        this.testDate = testDate;
+    }
+
+    public String getPrescribedRegimen() {
+        return prescribedRegimen;
+    }
+
+    public void setPrescribedRegimen(String prescribedRegimen) {
+        this.prescribedRegimen = prescribedRegimen;
+    }
 }

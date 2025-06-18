@@ -2,17 +2,88 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>HIV Clinic - Tra cứu</title>
+  <title>Tra cứu kết quả xét nghiệm HIV</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-    }
+    body { font-family: Arial; padding: 20px; background-color: #f7f7f7; }
+    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    input, button { padding: 10px; margin: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+    th { background-color: #eee; }
   </style>
 </head>
 <body>
-  <h1>Hệ thống điều trị HIV</h1>
-  <p>Chào mừng đến với trang tra cứu thông tin điều trị và xét nghiệm HIV</p>
+  <div class="container">
+    <h2>🔍 Tra cứu xét nghiệm HIV & Phác đồ điều trị</h2>
+
+    <label for="patientId">ID bệnh nhân:</label>
+    <input type="text" id="patientId" placeholder="Nhập ID bệnh nhân">
+
+    <label for="fromDate">Từ ngày:</label>
+    <input type="date" id="fromDate">
+
+    <label for="toDate">Đến ngày:</label>
+    <input type="date" id="toDate">
+
+    <button onclick="searchResults()">Tra cứu</button>
+
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Ngày xét nghiệm</th>
+          <th>Loại xét nghiệm</th>
+          <th>Kết quả</th>
+          <th>Phác đồ điều trị</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- dữ liệu sẽ được chèn tại đây -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function searchResults() {
+      const patientId = document.getElementById("patientId").value.trim();
+      const fromDate = document.getElementById("fromDate").value;
+      const toDate = document.getElementById("toDate").value;
+
+      if (!patientId || !fromDate || !toDate) {
+        alert("Vui lòng nhập đầy đủ thông tin");
+        return;
+      }
+
+      fetch(`/api/test-results/${patientId}?from=${fromDate}&to=${toDate}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Lỗi khi gọi API: " + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const tableBody = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
+          tableBody.innerHTML = ""; // clear bảng cũ
+
+          if (data.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='4'>Không có dữ liệu xét nghiệm</td></tr>";
+            return;
+          }
+
+          data.forEach(item => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+              <td>${item.testDate}</td>
+              <td>${item.testType}</td>
+              <td>${item.result}</td>
+              <td>${item.regimen || "Không có"}</td>
+            `;
+          });
+        })
+        .catch(error => {
+          console.error("Lỗi khi lấy dữ liệu:", error);
+          alert("Không thể lấy dữ liệu, vui lòng kiểm tra lại thông tin.");
+        });
+    }
+  </script>
 </body>
 </html>
