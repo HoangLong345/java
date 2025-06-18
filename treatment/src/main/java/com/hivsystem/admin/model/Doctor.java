@@ -1,5 +1,6 @@
 package com.hivsystem.admin.model;
 
+
 import jakarta.persistence.*;
 
 @Entity
