@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class ARVRegimen {
@@ -14,38 +16,37 @@ public class ARVRegimen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-
+    private String regimen;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    // Constructors
+    // Quan hệ với bệnh nhân (nếu đã có entity Patient)
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
     public ARVRegimen() {}
 
-    public ARVRegimen(String name, String description, LocalDate startDate, LocalDate endDate) {
-        this.name = name;
-        this.description = description;
+    public ARVRegimen(Long id, String regimen, LocalDate startDate, LocalDate endDate, Patient patient) {
+        this.id = id;
+        this.regimen = regimen;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.patient = patient;
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
+    public String getRegimen() { return regimen; }
+    public void setRegimen(String regimen) { this.regimen = regimen; }
 
     public LocalDate getStartDate() { return startDate; }
-
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
 
     public LocalDate getEndDate() { return endDate; }
-
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
+    public Patient getPatient() { return patient; }
+    public void setPatient(Patient patient) { this.patient = patient; }
 }

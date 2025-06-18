@@ -2,12 +2,12 @@ package com.example.hivclinic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class HivClinicApplication {
-
+@ComponentScan("com.example.hivclinic")
+public class HivSystemApplication {
     public static void main(String[] args) {
-        SpringApplication.run(HivClinicApplication.class, args);
+        SpringApplication.run(HivSystemApplication.class, args);
     }
-
 }
