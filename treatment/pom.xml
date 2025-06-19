@@ -91,5 +91,13 @@
     <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
 <!-- ...existing code... -->
+<!--lombok-->
+ <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.30</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
 
 </project>

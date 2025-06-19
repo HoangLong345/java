@@ -1,3 +1,12 @@
+import com.hiv.treatment.model.Entity;
+import com.hiv.treatment.model.GenerationType;
+import com.hiv.treatment.model.Id;
+import javax.persistence.GeneratedValue;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -10,5 +19,4 @@ public class Doctor {
     private String name;
     private String specialty;
 
-    private String workingSchedule;
 }
