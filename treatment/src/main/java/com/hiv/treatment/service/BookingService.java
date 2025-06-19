@@ -1,14 +1,10 @@
 package main.java.com.hiv.treatment.service;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.example.hivapp.pojo.Appointment;
 import com.example.hivapp.pojo.Doctor;
 import com.hivsystem.admin.repository.DoctorRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
