@@ -1,89 +1,117 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Tra cứu kết quả xét nghiệm HIV</title>
-  <style>
-    body { font-family: Arial; padding: 20px; background-color: #f7f7f7; }
-    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
-    input, button { padding: 10px; margin: 5px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
-    th { background-color: #eee; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Tra cứu lịch sử khám bệnh nhân HIV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🔍 Tra cứu xét nghiệm HIV & Phác đồ điều trị</h2>
 
-    <label for="patientId">ID bệnh nhân:</label>
-    <input type="text" id="patientId" placeholder="Nhập ID bệnh nhân">
+    <h2>Tra cứu lịch sử khám bệnh nhân HIV</h2>
 
-    <label for="fromDate">Từ ngày:</label>
-    <input type="date" id="fromDate">
+    <div class="search-box">
+        <label for="patientId">Mã bệnh nhân (ID):</label>
+        <input type="number" id="patientId" required>
 
-    <label for="toDate">Đến ngày:</label>
-    <input type="date" id="toDate">
+        <label for="fromDate">Từ ngày:</label>
+        <input type="date" id="fromDate">
 
-    <button onclick="searchResults()">Tra cứu</button>
+        <label for="toDate">Đến ngày:</label>
+        <input type="date" id="toDate">
 
-    <table id="resultsTable">
-      <thead>
-        <tr>
-          <th>Ngày xét nghiệm</th>
-          <th>Loại xét nghiệm</th>
-          <th>Kết quả</th>
-          <th>Phác đồ điều trị</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- dữ liệu sẽ được chèn tại đây -->
-      </tbody>
+        <button onclick="searchVisits()">Tra cứu</button>
+    </div>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Tên bệnh nhân</th>
+                <th>Ngày khám</th>
+                <th>Phác đồ ARV</th>
+                <th>CD4</th>
+                <th>Tải lượng HIV</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu sẽ được hiển thị tại đây -->
+        </tbody>
     </table>
-  </div>
 
-  <script>
-    function searchResults() {
-      const patientId = document.getElementById("patientId").value.trim();
-      const fromDate = document.getElementById("fromDate").value;
-      const toDate = document.getElementById("toDate").value;
+    <script>
+        async function searchVisits() {
+            const id = document.getElementById('patientId').value;
+            const from = document.getElementById('fromDate').value;
+            const to = document.getElementById('toDate').value;
 
-      if (!patientId || !fromDate || !toDate) {
-        alert("Vui lòng nhập đầy đủ thông tin");
-        return;
-      }
+            if (!id || !from || !to) {
+                alert("Vui lòng nhập đủ Mã bệnh nhân, từ ngày và đến ngày");
+                return;
+            }
 
-      fetch(`/api/test-results/${patientId}?from=${fromDate}&to=${toDate}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Lỗi khi gọi API: " + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          const tableBody = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
-          tableBody.innerHTML = ""; // clear bảng cũ
+            const url = `http://localhost:8080/mvc/api/visits/search?patientId=${id}&fromDate=${from}&toDate=${to}`;
 
-          if (data.length === 0) {
-            tableBody.innerHTML = "<tr><td colspan='4'>Không có dữ liệu xét nghiệm</td></tr>";
-            return;
-          }
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
 
-          data.forEach(item => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
-              <td>${item.testDate}</td>
-              <td>${item.testType}</td>
-              <td>${item.result}</td>
-              <td>${item.regimen || "Không có"}</td>
-            `;
-          });
-        })
-        .catch(error => {
-          console.error("Lỗi khi lấy dữ liệu:", error);
-          alert("Không thể lấy dữ liệu, vui lòng kiểm tra lại thông tin.");
-        });
-    }
-  </script>
+                const resultBody = document.querySelector("#resultTable tbody");
+                resultBody.innerHTML = ""; // clear bảng cũ trước khi thêm dữ liệu mới
+
+                if (data.length === 0) {
+                    const row = resultBody.insertRow();
+                    row.innerHTML = `<td colspan="5">Không có dữ liệu phù hợp</td>`;
+                    return;
+                }
+
+                for (const v of data) {
+                    const row = resultBody.insertRow();
+                    row.innerHTML = `
+                        <td>${v.name}</td>
+                        <td>${v.visitDate}</td>
+                        <td>${v.arvRegimen}</td>
+                        <td>${v.cd4Count}</td>
+                        <td>${v.hivViralLoad}</td>
+                    `;
+                }
+
+
+            } catch (err) {
+                console.error("Lỗi khi gọi API: ", err);
+                alert("Không thể lấy dữ liệu từ máy chủ. Kiểm tra kết nối hoặc log backend.");
+            }
+        }
+    </script>
+
+
 </body>
 </html>
