@@ -2,39 +2,85 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Tra cứu lịch sử khám bệnh nhân HIV</title>
+    <title>Tra cứu lịch sử khám bệnh HIV</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
         }
 
         .search-box {
-            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .search-box label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .search-box input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
+            border: 1px solid #dee2e6;
+            padding: 12px;
             text-align: center;
         }
 
         th {
-            background-color: #f4f4f4;
+            background-color: #343a40;
+            color: white;
         }
 
-        button {
-            padding: 8px 16px;
-            cursor: pointer;
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <h2>Tra cứu lịch sử khám bệnh nhân HIV</h2>
